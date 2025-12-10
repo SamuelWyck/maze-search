@@ -23,6 +23,7 @@ class DepthFirstSearch {
             return [];
         }
         if (key in memo) {
+            // might need to slice this list before I return it
             return memo[key];
         }
         const symbol = grid[row][col];
