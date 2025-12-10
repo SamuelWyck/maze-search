@@ -3,9 +3,9 @@ const Deque = require("../deque/deque.js");
 
 
 class BreadthFirstSearch {
-    constructor() {
-        this.wallSymbol = "W";
-        this.goalSymbol = "G";
+    constructor(wallSymbol, goalSymbol) {
+        this.wallSymbol = wallSymbol;
+        this.goalSymbol = goalSymbol;
     };
 
     breadthFirstPath(grid, startRow, startCol) {

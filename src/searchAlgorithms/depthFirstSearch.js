@@ -1,8 +1,7 @@
 class DepthFirstSearch {
-    constructor() {
-        this.goalSymbol = "G";
-        this.wallSymbol = "W";
-        this.emptySymbol = "O";
+    constructor(wallSymbol, goalSymbol) {
+        this.goalSymbol = goalSymbol;
+        this.wallSymbol = wallSymbol;
     };
 
     shortestPath(grid, startRow, startCol) {
