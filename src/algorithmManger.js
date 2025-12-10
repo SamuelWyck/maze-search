@@ -22,11 +22,11 @@ class AlgorithmManger {
     #createBoard(width, height) {
         const board = [];
         for (let row = 0; row < height; row += 1) {
-            const row = [];
+            const boardRow = [];
             for (let col = 0; col < width; col += 1) {
-                row.push(this.emptySymbol);
+                boardRow.push(this.emptySymbol);
             }
-            board.push(row);
+            board.push(boardRow);
         }
         return board;
     };
