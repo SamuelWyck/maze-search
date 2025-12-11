@@ -15,7 +15,7 @@
     background-color: var(--empty-color);
 }
 
-.visited {
+S {
     background-color: var(--visited-color);
 }
 
@@ -25,6 +25,10 @@
 
 .G {
     background-color: var(--goal-color);
+}
+
+.visited {
+    background-color: var(--visited-color);
 }
 
 .path {
