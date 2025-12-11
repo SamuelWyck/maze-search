@@ -1,9 +1,9 @@
 .board {
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--wall-color);
     width: min(100vw, 600px);
     height: min(100vw, 600px);
     display: grid;
-    grid-template-columns: repeat(20, 1fr);
+    grid-template-columns: repeat(19, 1fr);
 }
 
 .cell {
