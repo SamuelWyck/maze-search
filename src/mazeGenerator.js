@@ -1,31 +1,25 @@
 class MazeGenerator {
-    constructor(width, height, emptySymbol, wallSymbol) {
+    constructor(width, height, emptySymbol, wallSymbol, startSymbol, goalSymbol) {
         this.width = width;
         this.height = height;
         this.evenWidth = width % 2 === 0;
         this.emptySymbol = emptySymbol;
         this.wallSymbol = wallSymbol;
+        this.startSymbol = startSymbol;
+        this.goalSymbol = goalSymbol;
     };
 
     generateMaze() {
         const grid = this.#generateStartingGrid();
 
+        const [startRow, startCol] = this.#getRandomEmptyCellCoords(grid);
         const visited = new Set();
-
-        let startRow = null;
-        let startCol = null;
-        while (startRow == null || startCol === null) {
-            let row = this.#randInt(0, grid.length);
-            let col = this.#randInt(0, grid[0].length);
-            if (grid[row][col] === this.wallSymbol) {
-                continue;
-            }
-            startRow = row;
-            startCol = col;
-        }
         const firstPathLength = this.#randInt(1, grid.length / 2);
-
         this.#generatePaths(grid, startRow, startCol, firstPathLength, visited);
+
+        grid[startRow][startCol] = this.startSymbol;
+        const [goalRow, goalCol] = this.#getRandomEmptyCellCoords(grid);
+        grid[goalRow][goalCol] = this.goalSymbol;
         
         return grid;
     };
@@ -89,6 +83,16 @@ class MazeGenerator {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min) + min);
+    };
+
+    #getRandomEmptyCellCoords(grid) {
+        while (true) {
+            let randRow = this.#randInt(0, grid.length);
+            let randCol = this.#randInt(0, grid[0].length);
+            if (grid[randRow][randCol] === this.emptySymbol) {
+                return [randRow, randCol];
+            }
+        }
     };
 };
 
