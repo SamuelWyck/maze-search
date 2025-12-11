@@ -17,6 +17,8 @@ class AlgorithmManger {
 
         this.startRow = null;
         this.startCol = null;
+        this.goalRow = null;
+        this.goalCol = null;
     };
 
     #createBoard(width, height) {
@@ -67,19 +69,28 @@ class AlgorithmManger {
                     this.startRow = row;
                     this.startCol = col;
                     this.board[row][col] = this.emptySymbol;
-                } else {
-                    this.board[row][col] = newSymbol;
+                    continue;
                 }
+                
+                if (newSymbol === this.goalSymbol) {
+                    this.goalRow = row;
+                    this.goalCol = col;
+                } 
+                this.board[row][col] = newSymbol;
             }
         }
     };
 
     setCell(row, col, symbol) {
-        if (symbol === history.startSymbol) {
+        if (symbol === this.startSymbol) {
             this.board[row][col] = this.emptySymbol;
             this.startRow = row;
             this.startCol = col;
             return;
+        }
+
+        if (symbol === this.goalSymbol) {
+            this.board[this.goalRow][this.goalCol] = this.emptySymbol;
         }
         this.board[row][col] = symbol;
     };
