@@ -34,22 +34,22 @@ class AlgorithmManger {
     };
 
     breadthFirstSearch() {
-        if (!this.startRow || !this.startCol) {
+        if (this.startRow === null || this.startCol === null) {
             return null;
         }
 
-        const bfsPath = this.bfs.breadthFirstPath(this.grid, this.startRow, this.startCol);
-        const shortestPath = this.dfs.shortestPath(this.grid, this.startRow, this.startCol);
+        const bfsPath = this.bfs.breadthFirstPath(this.board, this.startRow, this.startCol);
+        const shortestPath = this.dfs.shortestPath(this.board, this.startRow, this.startCol);
         return [bfsPath, shortestPath];
     };
 
     depthFirstSearch() {
-        if (!this.startRow || !this.startCol) {
+        if (this.startRow === null || this.startCol === null) {
             return null;
         }
 
-        const dfsPath = this.dfs.dfsPath(this.grid, this.startRow, this.startCol);
-        const shortestPath = this.dfs.shortestPath(this.grid, this.startRow, this.startCol);
+        const dfsPath = this.dfs.dfsPath(this.board, this.startRow, this.startCol);
+        const shortestPath = this.dfs.shortestPath(this.board, this.startRow, this.startCol);
         return [dfsPath, shortestPath];
     };
 
