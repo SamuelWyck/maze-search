@@ -9,6 +9,8 @@ class DisplayBoard {
         this.goalSymbol = "G";
         this.startSymbol = "S";
         this.emptySymbol = "O";
+        this.visitedSymbol = "visited";
+        this.shortestPathSymbol = "path";
         this.boardDiv = document.querySelector(".board");
         this.cells = this.#fillBoard(width, height);
     };
@@ -32,6 +34,44 @@ class DisplayBoard {
         cell.dataset.row = row;
         cell.dataset.col = col;
         return cell;
+    };
+
+    setBoard(board) {
+        for (let row = 0; row < this.cells.length; row += 1) {
+            for (let col = 0; col < this.cells[row].length; col += 1) {
+                const newSymbol = board[row][col];
+                const cell = this.cells[row][col];
+                this.#removeCellClasses(cell);
+                cell.classList.add(newSymbol);
+            }
+        }
+    };
+
+    clearBoard() {
+        for (let row = 0; row < this.cells.length; row += 1) {
+            for (let col = 0; col < this.cells[row].length; col += 1) {
+                const cell = this.cells[row][col];
+                this.#removeCellClasses(cell);
+                cell.classList.add(this.emptySymbol);
+            }
+        }
+    };
+
+    setCell(row, col, classStr) {
+        const cell = this.cells[row][col];
+        this.#removeCellClasses(cell);
+        cell.classList.add(classStr);
+    };
+
+    #removeCellClasses(cell) {
+        cell.classList.remove(
+            this.emptySymbol, 
+            this.startSymbol, 
+            this.goalSymbol, 
+            this.wallSymbol, 
+            this.visitedSymbol, 
+            this.shortestPathSymbol
+        );
     };
 };
 
