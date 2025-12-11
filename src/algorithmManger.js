@@ -4,11 +4,11 @@ const DepthFirstSearch = require("./searchAlgorithms/depthFirstSearch.js");
 
 
 class AlgorithmManger {
-    constructor(width, height) {
-        this.wallSymbol = "W";
-        this.goalSymbol = "G";
-        this.startSymbol = "S";
-        this.emptySymbol = "O";
+    constructor(width, height, emptySymbol, wallSymbol, startSymbol, goalSymbol) {
+        this.emptySymbol = emptySymbol;
+        this.wallSymbol = wallSymbol;
+        this.startSymbol = startSymbol;
+        this.goalSymbol = goalSymbol;
 
         this.bfs = new BreadthFirstSearch(this.wallSymbol, this.goalSymbol);
         this.dfs = new DepthFirstSearch(this.wallSymbol, this.goalSymbol);
@@ -59,6 +59,10 @@ class AlgorithmManger {
                 this.board[row][col] = this.emptySymbol;
             }
         }
+        this.startRow = null;
+        this.startCol = null;
+        this.goalRow = null;
+        this.goalCol = null;
     };
 
     setBoard(board) {
@@ -83,16 +87,26 @@ class AlgorithmManger {
 
     setCell(row, col, symbol) {
         if (symbol === this.startSymbol) {
-            this.board[row][col] = this.emptySymbol;
+            if (this.startRow !== null) {
+                this.board[this.startRow][this.startCol] = this.emptySymbol;
+            }
             this.startRow = row;
             this.startCol = col;
             return;
         }
 
         if (symbol === this.goalSymbol) {
-            this.board[this.goalRow][this.goalCol] = this.emptySymbol;
+            if (this.goalRow !== null) {
+                this.board[this.goalRow][this.goalCol] = this.emptySymbol;
+            }
+            this.goalRow = row;
+            this.goalCol = col;
         }
         this.board[row][col] = symbol;
+    };
+
+    validStart() {
+        return this.startCol !== null && this.startRow !== null;
     };
 };
 
