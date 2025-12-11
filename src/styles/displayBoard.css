@@ -7,7 +7,6 @@
 }
 
 .cell {
-    background-color: var(--empty-color);
     border: 1px solid var(--border-color);
 }
 
@@ -15,7 +14,7 @@
     background-color: var(--empty-color);
 }
 
-S {
+.S {
     background-color: var(--visited-color);
 }
 
