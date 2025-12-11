@@ -1,13 +1,13 @@
 const DisplayBoard = require("./displayBoard.js");
 const AlgorithmManger = require("./algorithmManger.js");
-const templates = require("./mazeTemplates.js");
+const MazeGenerator = require("./mazeGenerator.js");
 
 
 
 class SearchAlgorithmInterface {
     constructor() {
-        const boardWidth = 20;
-        const boardHeight = 20;
+        const boardWidth = 19;
+        const boardHeight = 19;
         this.emptySymbol = "O";
         this.wallSymbol = "W";
         this.goalSymbol = "G";
@@ -35,11 +35,16 @@ class SearchAlgorithmInterface {
             this.shortestPathSymbol,
             this.boardDiv
         );
+        this.mazeGenerator = new MazeGenerator(
+            boardWidth, 
+            boardHeight, 
+            this.emptySymbol, 
+            this.wallSymbol, 
+            this.startSymbol, 
+            this.goalSymbol
+        );
 
-        this.mazeTemplates = templates;
-        this.templateIndex = 0;
-        this.display.setBoard(this.mazeTemplates[this.templateIndex]);
-        this.algorithmManager.setBoard(this.mazeTemplates[this.templateIndex]);
+        this.#randomizeGrid();
 
         this.breadthFirstSearch = true;
         this.running = false;
@@ -64,6 +69,12 @@ class SearchAlgorithmInterface {
         this.searchPath = searchPath;
         this.directPath = directPath;
         this.searchPathIndex = 0;
+    };
+
+    #randomizeGrid() {
+        const maze = this.mazeGenerator.generateMaze();
+        this.display.setBoard(maze);
+        this.algorithmManager.setBoard(maze);
     };
 
     scrubBtnsCallBack(event) {
