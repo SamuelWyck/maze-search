@@ -21,7 +21,10 @@ class DisplayBoard {
         this.goalClassStr = goalClassStr;
         this.visitedClassStr = visitedClassStr;
         this.shortestPathClassStr = shortestPathClassStr;
+
         this.boardDiv = boardDiv;
+        this.startCell = null;
+        this.goalCell = null;
         this.cells = this.#fillBoard(width, height);
     };
 
@@ -53,6 +56,12 @@ class DisplayBoard {
                 const cell = this.cells[row][col];
                 this.#removeCellClasses(cell);
                 cell.classList.add(newClassStr);
+
+                if (newClassStr === this.startClassStr) {
+                    this.startCell = cell;
+                } else if (newClassStr === this.goalClassStr) {
+                    this.goalCell = cell;
+                }
             }
         }
     };
@@ -65,12 +74,30 @@ class DisplayBoard {
                 cell.classList.add(this.emptyClassStr);
             }
         }
+        this.goalCell = null;
+        this.startCell = null;
     };
 
     setCell(row, col, classStr) {
         const cell = this.cells[row][col];
         this.#removeCellClasses(cell);
         cell.classList.add(classStr);
+
+        if (classStr === this.goalClassStr) {
+            const oldGoalCell = this.goalCell;
+            this.goalCell = cell;
+            if (oldGoalCell !== null) {
+                this.#removeCellClasses(oldGoalCell);
+                oldGoalCell.classList.add(this.emptyClassStr);
+            }
+        } else if (classStr === this.startClassStr) {
+            const oldStartCell = this.startCell;
+            this.startCell = cell;
+            if (oldStartCell !== null) {
+                this.#removeCellClasses(oldStartCell);
+                oldStartCell.classList.add(this.emptyClassStr);
+            }
+        }
     };
 
     #removeCellClasses(cell) {
