@@ -4,14 +4,24 @@ const createElement = require("./utils/createElement.js");
 
 
 class DisplayBoard {
-    constructor(width, height) {
-        this.wallClassStr = "W";
-        this.goalClassStr = "G";
-        this.startClassStr = "S";
-        this.emptyClassStr = "O";
-        this.visitedClassStr = "visited";
-        this.shortestPathClassStr = "path";
-        this.boardDiv = document.querySelector(".board");
+    constructor(
+        width, 
+        height, 
+        emptyClassStr, 
+        wallClassStr,
+        startClassStr, 
+        goalClassStr, 
+        visitedClassStr, 
+        shortestPathClassStr,
+        boardDiv
+    ) {
+        this.emptyClassStr = emptyClassStr;
+        this.wallClassStr = wallClassStr;
+        this.startClassStr = startClassStr;
+        this.goalClassStr = goalClassStr;
+        this.visitedClassStr = visitedClassStr;
+        this.shortestPathClassStr = shortestPathClassStr;
+        this.boardDiv = boardDiv;
         this.cells = this.#fillBoard(width, height);
     };
 
