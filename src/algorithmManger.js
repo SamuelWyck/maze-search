@@ -75,6 +75,12 @@ class AlgorithmManger {
     };
 
     setCell(row, col, symbol) {
+        if (symbol === history.startSymbol) {
+            this.board[row][col] = this.emptySymbol;
+            this.startRow = row;
+            this.startCol = col;
+            return;
+        }
         this.board[row][col] = symbol;
     };
 };
