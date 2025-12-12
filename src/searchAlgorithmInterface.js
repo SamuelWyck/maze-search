@@ -50,6 +50,7 @@ class SearchAlgorithmInterface {
         this.running = false;
         this.speeds = [500, 250, 100, 0]; //speed in miliseconds
         this.speedIndex = 0;
+        this.reversePlay = false;
 
         this.searchPath = null;
         this.searchPathIndex = 0;
@@ -90,11 +91,16 @@ class SearchAlgorithmInterface {
             if (!this.algorithmManager.validStart()) {
                 return;
             }
+            if (this.running) {
+                this.running = false;
+                return;
+            }
             this.#undoSearchStep();
         } else if (target.matches(".speed-btn")) {
             this.speedIndex += 1;
             if (this.speedIndex === this.speeds.length) {
                 this.speedIndex = 0;
+                this.reversePlay = !this.reversePlay;
             }
 
         } else if (target.matches(".play-pause-btn")) {
@@ -105,6 +111,9 @@ class SearchAlgorithmInterface {
                 this.running = false;
                 return;
             }
+            if (this.reversePlay && this.history.length === 0) {
+                return;
+            }
 
             if (this.searchPath === null || this.directPath == null) {
                 this.#generateSearch();
@@ -113,6 +122,10 @@ class SearchAlgorithmInterface {
             this.autoPlay();
         } else if (target.matches(".forward-btn")) {
             if (!this.algorithmManager.validStart()) {
+                return;
+            }
+            if (this.running) {
+                this.running = false;
                 return;
             }
             if (this.searchPath === null || this.directPath == null) {
@@ -171,9 +184,17 @@ class SearchAlgorithmInterface {
     };
 
     autoPlay() {
-        this.#showVisitedCell();
-        if (this.searchPathIndex === this.searchPath.length) {
-            return;
+        if (this.reversePlay) {
+            this.searchPathIndex -= 1;
+            const undoFunction = this.history.pop();
+            undoFunction();
+        } else {
+            this.#showVisitedCell();
+        }
+
+        const stopPlaying = this.searchPathIndex === this.searchPath.length || this.searchPathIndex === 0;
+        if (stopPlaying) {
+            this.running = false;
         }
 
         if (this.running) {
