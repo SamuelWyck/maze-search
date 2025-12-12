@@ -90,10 +90,7 @@ class SearchAlgorithmInterface {
             if (!this.algorithmManager.validStart()) {
                 return;
             }
-            if (this.searchPath === null || this.directPath == null) {
-                this.#generateSearch();
-            }
-            
+            this.#undoSearchStep();
         } else if (target.matches(".speed-btn")) {
             this.speedIndex += 1;
             if (this.speedIndex === this.speeds.length) {
@@ -126,6 +123,16 @@ class SearchAlgorithmInterface {
         }
     };
 
+    #undoSearchStep() {
+        if (this.history.length === 0) {
+            return;
+        }
+
+        this.searchPathIndex -= 1;
+        const undoFunction = this.history.pop();
+        undoFunction();
+    };
+
     #showVisitedCell() {
         this.searchPathIndex += 1;
         if (this.searchPathIndex > this.searchPath.length) {
@@ -140,6 +147,12 @@ class SearchAlgorithmInterface {
         const position = this.searchPath[this.searchPathIndex];
         const [row, col] = position;
         this.display.setCell(row, col, this.visitedSymbol);
+
+        const undoSymbol = (this.searchPathIndex === this.searchPath.length - 1) ? this.goalSymbol : this.emptySymbol;
+        const undoFunction = () => {
+            this.display.setCell(row, col, undoSymbol);
+        };
+        this.history.push(undoFunction);
     };
 
     #showShortestPath() {
@@ -148,13 +161,13 @@ class SearchAlgorithmInterface {
             this.display.setCell(row, col, this.shortestPathSymbol);
         }
 
-        const undoFunc = () => {
+        const undoFunction = () => {
             for (let position of this.directPath) {
                 const [row, col] = position;
                 this.display.setCell(row, col, this.visitedSymbol);
             }
         };
-        this.history.push(undoFunc);
+        this.history.push(undoFunction);
     };
 
     autoPlay() {
