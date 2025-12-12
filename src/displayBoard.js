@@ -83,7 +83,7 @@ class DisplayBoard {
         this.#removeCellClasses(cell);
         cell.classList.add(classStr);
 
-        if (classStr === this.goalClassStr) {
+        if (classStr === this.goalClassStr && cell !== this.goalCell) {
             const oldGoalCell = this.goalCell;
             this.goalCell = cell;
             if (oldGoalCell !== null) {
