@@ -58,6 +58,7 @@ class SearchAlgorithmInterface {
         this.history = [];
 
         this.scrubBtnsCallBack = this.scrubBtnsCallBack.bind(this);
+        this.editBtnsCallBack = this.editBtnsCallBack.bind(this);
         this.autoPlay = this.autoPlay.bind(this);
         this.initializeInterface();
     };
@@ -81,6 +82,25 @@ class SearchAlgorithmInterface {
         this.algorithmManager.setBoard(maze);
     };
 
+    editBtnsCallBack(event) {
+        const target = (event.target.matches("button")) ? event.target : event.target.parentElement;
+        if (!target.matches("button")) {
+            return;
+        }
+
+        if (target.matches(".bfs-btn")) {
+
+        } else if (target.matches(".dfs-btn")) {
+
+        } else if (target.matches(".randomize-btn")) {
+            this.#resetSearch();
+            this.#randomizeGrid();
+
+        } else if (target.matches("edit-btn")) {
+
+        }
+    };
+
     scrubBtnsCallBack(event) {
         const target = (event.target.matches("button")) ? event.target : event.target.parentElement;
         if (!target.matches("button")) {
@@ -95,7 +115,9 @@ class SearchAlgorithmInterface {
                 this.running = false;
                 return;
             }
+
             this.#undoSearchStep();
+
         } else if (target.matches(".speed-btn")) {
             this.speedIndex += 1;
             if (this.speedIndex === this.speeds.length) {
@@ -105,9 +127,6 @@ class SearchAlgorithmInterface {
 
         } else if (target.matches(".play-pause-btn")) {
             if (!this.algorithmManager.validStart()) {
-                return;
-            }
-            if (this.reversePlay && this.history.length === 0) {
                 return;
             }
 
@@ -120,6 +139,7 @@ class SearchAlgorithmInterface {
                 this.running = true;
                 this.autoPlay();
             }
+
         } else if (target.matches(".forward-btn")) {
             if (!this.algorithmManager.validStart()) {
                 return;
@@ -128,12 +148,22 @@ class SearchAlgorithmInterface {
                 this.running = false;
                 return;
             }
+
             if (this.searchPath === null || this.directPath == null) {
                 this.#generateSearch();
             }
-
             this.#showVisitedCell();
         }
+    };
+
+    #resetSearch() {
+        this.speedIndex = 0;
+        this.reversePlay = false;
+        this.searchPath = null;
+        this.searchPathIndex = 0;
+        this.directPath = null;
+        this.history = [];
+        this.running = false;
     };
 
     #undoSearchStep() {
@@ -184,10 +214,12 @@ class SearchAlgorithmInterface {
     };
 
     autoPlay() {
+        if (!this.running) {
+            return;
+        }
+
         if (this.reversePlay) {
-            this.searchPathIndex -= 1;
-            const undoFunction = this.history.pop();
-            undoFunction();
+            this.#undoSearchStep();
         } else {
             this.#showVisitedCell();
         }
@@ -205,6 +237,9 @@ class SearchAlgorithmInterface {
     initializeInterface() {
         const scrubBtnsDiv = document.querySelector(".search-movement");
         scrubBtnsDiv.addEventListener("click", this.scrubBtnsCallBack);
+
+        const editBtnsDiv = document.querySelector(".search-controls");
+        editBtnsDiv.addEventListener("click", this.editBtnsCallBack);
     };
 };
 
