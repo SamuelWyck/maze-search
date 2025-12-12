@@ -1,0 +1,114 @@
+.maze-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-controls, .search-movement, .btn-grouping {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.search-controls, .search-movement {
+    padding: 0 1rem;
+}
+
+.btn-grouping {
+    width: initial;
+}
+
+button {
+    display: flex;
+    gap: .3rem;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+    font-family: "roboto";
+    font-weight: bold;
+    letter-spacing: .02rem;
+    color: var(--blue-light-color);
+    padding: .5rem .6rem;
+    background-color: var(--dark-metallic-color);
+    background-image: linear-gradient(var(--light-metallic-color), 70%, var(--dark-metallic-color));
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px -1px black;
+    will-change: scale;
+    transition: transform .1s linear;
+    --filter: var(--blue-light-filter);
+}
+
+button:hover, button:active {
+    transform: scale(1.1);
+    color: var(--orange-light-color);
+    --filter: var(--orange-light-filter);
+}
+
+button:active {
+    box-shadow: 0px 5px 10px -1px inset black;
+}
+
+.active {
+    color: var(--orange-light-color);
+}
+
+button img {
+    filter: var(--filter);
+}
+
+button img {
+    width: clamp(20px, 18px + 1vw, 25px)
+}
+
+.randomize-btn img {
+    transform: rotate(45deg);
+}
+
+.play-pause-btn.play img {
+    content: url("../assets/images/play.svg");
+}
+
+.play-pause-btn.pause img {
+    content: url("../assets/images/pause.svg");
+}
+
+.speed-btn::before {
+    display: inline-block
+}
+
+.speed-btn.one::before {
+    content: "1x";
+}
+
+.speed-btn.two::before {
+    content: "2x";
+}
+
+.speed-btn.five::before {
+    content: "5x";
+}
+
+.speed-btn.max::before {
+    content: "500x";
+}
+
+.speed-btn.-one::before {
+    content: "-1x";
+}
+
+.speed-btn.-two::before {
+    content: "-2x";
+}
+
+.speed-btn.-five::before {
+    content: "-5x";
+}
+
+.speed-btn.-max::before {
+    content: "-500x";
+}
