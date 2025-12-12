@@ -21,8 +21,8 @@ class SearchAlgorithmInterface {
             boardHeight,
             this.emptySymbol,
             this.wallSymbol,
-            this.goalSymbol,
-            this.startSymbol
+            this.startSymbol,
+            this.goalSymbol
         );
         this.display = new DisplayBoard(
             boardWidth,
@@ -56,6 +56,8 @@ class SearchAlgorithmInterface {
         this.directPath = null;
 
         this.scrubBtnsCallBack = this.scrubBtnsCallBack.bind(this);
+        this.autoPlay = this.autoPlay.bind(this);
+        this.initializeInterface();
     };
 
     #generateSearch() {
@@ -83,29 +85,53 @@ class SearchAlgorithmInterface {
             return;
         }
 
-        if (target.matches("back-btn")) {
+        if (target.matches(".back-btn")) {
             if (!this.algorithmManager.validStart()) {
                 return;
             }
             if (this.searchPath === null || this.directPath == null) {
                 this.#generateSearch();
             }
-        } else if (target.matches("speed-btn")) {
+        } else if (target.matches(".speed-btn")) {
+            this.speedIndex += 1;
+            if (this.speedIndex === this.speeds.length) {
+                this.speedIndex = 0;
+            }
 
-        } else if (target.matches("play-pause-btn")) {
+        } else if (target.matches(".play-pause-btn")) {
+            if (!this.algorithmManager.validStart()) {
+                return;
+            }
+            if (this.running) {
+                this.running = false;
+                return;
+            }
+
+            if (this.searchPath === null || this.directPath == null) {
+                this.#generateSearch();
+            }
+            this.running = true;
+            this.autoPlay();
+        } else if (target.matches(".forward-btn")) {
             if (!this.algorithmManager.validStart()) {
                 return;
             }
             if (this.searchPath === null || this.directPath == null) {
                 this.#generateSearch();
             }
-        } else if (target.matches("forward-btn")) {
-            if (!this.algorithmManager.validStart()) {
-                return;
-            }
-            if (this.searchPath === null || this.directPath == null) {
-                this.#generateSearch();
-            }
+        }
+    };
+
+    autoPlay() {
+        const [cellRow, cellCol] = this.searchPath[this.searchPathIndex];
+        this.display.setCell(cellRow, cellCol, this.visitedSymbol);
+        this.searchPathIndex += 1;
+        if (this.searchPathIndex === this.searchPath.length) {
+            return;
+        }
+
+        if (this.running) {
+            setTimeout(this.autoPlay, this.speeds[this.speedIndex]);
         }
     };
 
