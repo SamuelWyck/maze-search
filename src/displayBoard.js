@@ -90,7 +90,7 @@ class DisplayBoard {
                 this.#removeCellClasses(oldGoalCell);
                 oldGoalCell.classList.add(this.emptyClassStr);
             }
-        } else if (classStr === this.startClassStr) {
+        } else if (classStr === this.startClassStr && cell !== this.startCell) {
             const oldStartCell = this.startCell;
             this.startCell = cell;
             if (oldStartCell !== null) {
@@ -109,6 +109,21 @@ class DisplayBoard {
             this.visitedClassStr, 
             this.shortestPathClassStr
         );
+    };
+
+    clearSearchPath(searchPath) {
+        for (let position of searchPath) {
+            const [row, col] = position;
+            const cell = this.cells[row][col];
+
+            let classStr = this.emptyClassStr;
+            if (cell === this.startCell) {
+                classStr = this.startClassStr;
+            } else if (cell === this.goalCell) {
+                classStr = this.goalClassStr;
+            }
+            this.setCell(row, col, classStr);
+        }
     };
 };
 
