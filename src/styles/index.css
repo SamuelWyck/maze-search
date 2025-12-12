@@ -17,7 +17,28 @@ html {
     --goal-color: #FFB000;
     --visited-color: #E25E3E;
     --path-color: #004225;
-
+    --light-metallic-color: #AFB0B3;
+    --dark-metallic-color: #838487;
+    --blue-light-color: #26F7FD;
+    --orange-light-color: #FDAA48;
+    --blue-light-filter: 
+    brightness(0) 
+    saturate(100%) 
+    invert(83%) 
+    sepia(40%) 
+    saturate(1886%) 
+    hue-rotate(140deg) 
+    brightness(103%) 
+    contrast(98%);
+    --orange-light-filter: 
+    brightness(0) 
+    saturate(100%) 
+    invert(78%) 
+    sepia(16%) 
+    saturate(2227%) 
+    hue-rotate(329deg) 
+    brightness(102%) 
+    contrast(98%);
 }
 
 #root {
@@ -26,4 +47,7 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #d3d3d3;
+    background-image: url("../assets/images/background.svg");
+    background-size: contain;
 }
