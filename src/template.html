@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Test</title>
+    <title>Path Finding Algorithms</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
+    <link rel="icon" type="images/svg" href="./assets/images/favicon.svg">
 </head>
 <body>
     <div id="root">
         <section class="maze-wrapper">
             <div class="search-controls">
-                <button class="bfs-btn">Breadth First</button>
-                <button class="dfs-btn">Depth First</button>
-                <button class="randomize-btn">Random Grid</button>
-                <button class="edit-btn">Edit</button>
+                <div class="btn-grouping">
+                    <button class="bfs-btn">Breadth First</button>
+                    <button class="dfs-btn">Depth First</button>
+                </div>
+                <div class="btn-grouping">
+                    <button class="randomize-btn"><img src="./assets/images/random.svg" alt="random">Grid</button>
+                    <button class="edit-btn"><img src="./assets/images/pencil.svg" alt="edit"></button>
+                </div>
             </div>
             <div class="board"></div>
             <div class="search-movement">
-                <button class="speed-btn">speed</button>
-                <button class="play-pause-btn">play/pause</button>
-                <button class="back-btn">back</button>
-                <button class="forward-btn">forward</button>
+                <div class="btn-grouping">
+                    <button class="speed-btn one"><img src="./assets/images/speedometer.svg" alt="speed"></button>
+                    <button class="play-pause-btn play"><img src="#" alt="play/pause"></button>
+                </div>
+                <div class="btn-grouping">
+                    <button class="back-btn"><img src="./assets/images/backward.svg" alt="step-backwards"></button>
+                    <button class="forward-btn"><img src="./assets/images/forward.svg" alt="step-forwards"></button>
+                </div>
             </div>
         </section>
     </div>
