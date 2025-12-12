@@ -30,7 +30,7 @@ class MazeGenerator {
         if (!rowValid || !colValid) {
             return false;
         }
-        if (pathLength === 0) {
+        if (pathLength < 0) {
             return false;
         }
         const key = JSON.stringify([row, col]);
