@@ -89,8 +89,22 @@ class SearchAlgorithmInterface {
         }
 
         if (target.matches(".bfs-btn")) {
+            if (this.breadthFirstSearch) {
+                return;
+            }
+
+            this.display.clearSearchPath(this.searchPath);
+            this.#resetSearch();
+            this.breadthFirstSearch = true;
 
         } else if (target.matches(".dfs-btn")) {
+            if (!this.breadthFirstSearch) {
+                return;
+            }
+
+            this.display.clearSearchPath(this.searchPath);
+            this.#resetSearch();
+            this.breadthFirstSearch = false;
 
         } else if (target.matches(".randomize-btn")) {
             this.#resetSearch();
