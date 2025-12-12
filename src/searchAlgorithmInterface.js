@@ -15,6 +15,9 @@ class SearchAlgorithmInterface {
         this.startSymbol = "S";
         this.visitedSymbol = "visited";
         this.shortestPathSymbol = "path";
+        this.playClass = "play";
+        this.pauseClass = "pause";
+        this.playPauseBtn = document.querySelector(".play-pause-btn");
         this.boardDiv = document.querySelector(".board");
 
         this.algorithmManager = new AlgorithmManger(
@@ -158,6 +161,8 @@ class SearchAlgorithmInterface {
                 this.running = true;
                 this.autoPlay();
             }
+            this.playPauseBtn.classList.toggle(this.playClass);
+            this.playPauseBtn.classList.toggle(this.pauseClass);
 
         } else if (target.matches(".forward-btn")) {
             if (!this.algorithmManager.validStart()) {
