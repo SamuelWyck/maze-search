@@ -4,6 +4,7 @@
     height: min(100vw, 600px);
     display: grid;
     grid-template-columns: repeat(19, 1fr);
+    box-shadow: 0px 0px 20px -5px black;
 }
 
 .cell {
