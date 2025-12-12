@@ -54,6 +54,7 @@ class SearchAlgorithmInterface {
         this.searchPath = null;
         this.searchPathIndex = 0;
         this.directPath = null;
+        this.history = [];
 
         this.scrubBtnsCallBack = this.scrubBtnsCallBack.bind(this);
         this.autoPlay = this.autoPlay.bind(this);
@@ -92,6 +93,7 @@ class SearchAlgorithmInterface {
             if (this.searchPath === null || this.directPath == null) {
                 this.#generateSearch();
             }
+            
         } else if (target.matches(".speed-btn")) {
             this.speedIndex += 1;
             if (this.speedIndex === this.speeds.length) {
@@ -119,13 +121,44 @@ class SearchAlgorithmInterface {
             if (this.searchPath === null || this.directPath == null) {
                 this.#generateSearch();
             }
+
+            this.#showVisitedCell();
         }
     };
 
-    autoPlay() {
-        const [cellRow, cellCol] = this.searchPath[this.searchPathIndex];
-        this.display.setCell(cellRow, cellCol, this.visitedSymbol);
+    #showVisitedCell() {
         this.searchPathIndex += 1;
+        if (this.searchPathIndex > this.searchPath.length) {
+            this.searchPathIndex -= 1;
+            return;
+        }
+        if (this.searchPathIndex === this.searchPath.length) {
+            this.#showShortestPath();
+            return;
+        }
+
+        const position = this.searchPath[this.searchPathIndex];
+        const [row, col] = position;
+        this.display.setCell(row, col, this.visitedSymbol);
+    };
+
+    #showShortestPath() {
+        for (let position of this.directPath) {
+            const [row, col] = position;
+            this.display.setCell(row, col, this.shortestPathSymbol);
+        }
+
+        const undoFunc = () => {
+            for (let position of this.directPath) {
+                const [row, col] = position;
+                this.display.setCell(row, col, this.visitedSymbol);
+            }
+        };
+        this.history.push(undoFunc);
+    };
+
+    autoPlay() {
+        this.#showVisitedCell();
         if (this.searchPathIndex === this.searchPath.length) {
             return;
         }
