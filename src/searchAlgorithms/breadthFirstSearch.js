@@ -35,7 +35,7 @@ class BreadthFirstSearch {
                     continue;
                 }
                 const key = JSON.stringify(neighbor);
-                const symbol = grid[row][col];
+                const symbol = grid[nRow][nCol];
                 if (visited.has(key) || symbol === this.wallSymbol) {
                     continue;
                 }
