@@ -107,10 +107,6 @@ class SearchAlgorithmInterface {
             if (!this.algorithmManager.validStart()) {
                 return;
             }
-            if (this.running) {
-                this.running = false;
-                return;
-            }
             if (this.reversePlay && this.history.length === 0) {
                 return;
             }
@@ -118,8 +114,12 @@ class SearchAlgorithmInterface {
             if (this.searchPath === null || this.directPath == null) {
                 this.#generateSearch();
             }
-            this.running = true;
-            this.autoPlay();
+            if (this.running) {
+                this.running = false;
+            } else {
+                this.running = true;
+                this.autoPlay();
+            }
         } else if (target.matches(".forward-btn")) {
             if (!this.algorithmManager.validStart()) {
                 return;
