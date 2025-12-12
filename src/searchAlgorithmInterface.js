@@ -1,3 +1,4 @@
+require("./styles/interface.css");
 const DisplayBoard = require("./displayBoard.js");
 const AlgorithmManger = require("./algorithmManger.js");
 const MazeGenerator = require("./mazeGenerator.js");
@@ -93,7 +94,9 @@ class SearchAlgorithmInterface {
                 return;
             }
 
-            this.display.clearSearchPath(this.searchPath);
+            if (this.searchPath !== null) {
+                this.display.clearSearchPath(this.searchPath);
+            }
             this.#resetSearch();
             this.breadthFirstSearch = true;
 
@@ -102,7 +105,9 @@ class SearchAlgorithmInterface {
                 return;
             }
 
-            this.display.clearSearchPath(this.searchPath);
+            if (this.searchPath !== null) {
+                this.display.clearSearchPath(this.searchPath);
+            }
             this.#resetSearch();
             this.breadthFirstSearch = false;
 
