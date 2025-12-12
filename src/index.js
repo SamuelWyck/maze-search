@@ -3,4 +3,4 @@ const SearchAlgorithmInterface = require("./searchAlgorithmInterface.js");
 
 
 
-const interface = new SearchAlgorithmInterface();
+new SearchAlgorithmInterface();
