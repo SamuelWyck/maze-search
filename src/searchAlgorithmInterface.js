@@ -18,6 +18,7 @@ class SearchAlgorithmInterface {
         this.playClass = "play";
         this.pauseClass = "pause";
         this.playPauseBtn = document.querySelector(".play-pause-btn");
+        this.speedBtn = document.querySelector(".speed-btn");
         this.boardDiv = document.querySelector(".board");
 
         this.algorithmManager = new AlgorithmManger(
@@ -55,6 +56,10 @@ class SearchAlgorithmInterface {
         this.speeds = [500, 250, 100, 0]; //speed in miliseconds
         this.speedIndex = 0;
         this.reversePlay = false;
+
+        this.speedBtnClassMap = {};
+        this.speedBtnClassMap[false] = {500: "one", 250: "two", 100: "five", 0: "max"};
+        this.speedBtnClassMap[true] = {500: "-one", 250: "-two", 100: "-five", 0: "-max"};
 
         this.searchPath = null;
         this.searchPathIndex = 0;
@@ -135,6 +140,7 @@ class SearchAlgorithmInterface {
             }
             if (this.running) {
                 this.running = false;
+                this.#togglePlayPauseBtnClass();
                 return;
             }
 
@@ -146,6 +152,7 @@ class SearchAlgorithmInterface {
                 this.speedIndex = 0;
                 this.reversePlay = !this.reversePlay;
             }
+            this.#setSpeedBtnClass();
 
         } else if (target.matches(".play-pause-btn")) {
             if (!this.algorithmManager.validStart()) {
@@ -161,8 +168,7 @@ class SearchAlgorithmInterface {
                 this.running = true;
                 this.autoPlay();
             }
-            this.playPauseBtn.classList.toggle(this.playClass);
-            this.playPauseBtn.classList.toggle(this.pauseClass);
+            this.#togglePlayPauseBtnClass();
 
         } else if (target.matches(".forward-btn")) {
             if (!this.algorithmManager.validStart()) {
@@ -170,6 +176,7 @@ class SearchAlgorithmInterface {
             }
             if (this.running) {
                 this.running = false;
+                this.#togglePlayPauseBtnClass();
                 return;
             }
 
@@ -180,14 +187,31 @@ class SearchAlgorithmInterface {
         }
     };
 
+    #togglePlayPauseBtnClass() {
+        this.playPauseBtn.classList.toggle(this.playClass);
+        this.playPauseBtn.classList.toggle(this.pauseClass);
+    };
+
+    #setSpeedBtnClass() {
+        const speedBtnClasses = ["one", "two", "five", "max", "-one", "-two", "-five", "-max"];
+        this.speedBtn.classList.remove(...speedBtnClasses);
+        const currentSpeed = this.speeds[this.speedIndex];
+        const newClass = this.speedBtnClassMap[this.reversePlay][currentSpeed];
+        this.speedBtn.classList.add(newClass);
+    };
+
     #resetSearch() {
         this.speedIndex = 0;
+        this.#setSpeedBtnClass();
         this.reversePlay = false;
         this.searchPath = null;
         this.searchPathIndex = 0;
         this.directPath = null;
         this.history = [];
-        this.running = false;
+        if (this.running) {
+            this.#togglePlayPauseBtnClass();
+            this.running = false;
+        }
     };
 
     #undoSearchStep() {
@@ -251,6 +275,7 @@ class SearchAlgorithmInterface {
         const stopPlaying = this.searchPathIndex === this.searchPath.length || this.searchPathIndex === 0;
         if (stopPlaying) {
             this.running = false;
+            this.#togglePlayPauseBtnClass();
         }
 
         if (this.running) {
