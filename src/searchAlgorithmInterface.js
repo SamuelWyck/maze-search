@@ -19,6 +19,8 @@ class SearchAlgorithmInterface {
         this.pauseClass = "pause";
         this.playPauseBtn = document.querySelector(".play-pause-btn");
         this.speedBtn = document.querySelector(".speed-btn");
+        this.bfsBtn = document.querySelector(".bfs-btn");
+        this.dfsBtn = document.querySelector(".dfs-btn");
         this.boardDiv = document.querySelector(".board");
 
         this.algorithmManager = new AlgorithmManger(
@@ -107,6 +109,7 @@ class SearchAlgorithmInterface {
             }
             this.#resetSearch();
             this.breadthFirstSearch = true;
+            this.#toggleSearchBtnsActiveClass();
 
         } else if (target.matches(".dfs-btn")) {
             if (!this.breadthFirstSearch) {
@@ -118,6 +121,7 @@ class SearchAlgorithmInterface {
             }
             this.#resetSearch();
             this.breadthFirstSearch = false;
+            this.#toggleSearchBtnsActiveClass();
 
         } else if (target.matches(".randomize-btn")) {
             this.#resetSearch();
@@ -190,6 +194,11 @@ class SearchAlgorithmInterface {
     #togglePlayPauseBtnClass() {
         this.playPauseBtn.classList.toggle(this.playClass);
         this.playPauseBtn.classList.toggle(this.pauseClass);
+    };
+
+    #toggleSearchBtnsActiveClass() {
+        this.bfsBtn.classList.toggle("active");
+        this.dfsBtn.classList.toggle("active");
     };
 
     #setSpeedBtnClass() {
