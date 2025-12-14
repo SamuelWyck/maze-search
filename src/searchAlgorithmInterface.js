@@ -211,8 +211,8 @@ class SearchAlgorithmInterface {
 
     #resetSearch() {
         this.speedIndex = 0;
-        this.#setSpeedBtnClass();
         this.reversePlay = false;
+        this.#setSpeedBtnClass();
         this.searchPath = null;
         this.searchPathIndex = 0;
         this.directPath = null;
