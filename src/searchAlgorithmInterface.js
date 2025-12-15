@@ -417,7 +417,7 @@ class SearchAlgorithmInterface {
 
         this.boardDiv.addEventListener("dragstart", function(event) {
             event.preventDefault();
-        })
+        });
     };
 };
 
