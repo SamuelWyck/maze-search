@@ -306,7 +306,8 @@ class SearchAlgorithmInterface {
         const [row, col] = position;
         this.display.setCell(row, col, this.visitedSymbol);
 
-        const undoSymbol = (this.searchPathIndex === this.searchPath.length - 1) ? this.goalSymbol : this.emptySymbol;
+        const isGoalSymbol = this.searchPathIndex === this.searchPath.length - 1 && this.directPath.length !== 0;
+        const undoSymbol = (isGoalSymbol) ? this.goalSymbol : this.emptySymbol;
         const undoFunction = () => {
             this.display.setCell(row, col, undoSymbol);
         };
