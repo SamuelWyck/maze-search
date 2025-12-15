@@ -164,7 +164,7 @@ button img {
     right: 13vw;
     margin: auto 0;
 
-    background-image: url("../assets/images/background.svg");
+    background-color: var(--empty-color);
     background-size: cover;
     padding: 1rem;
     border-radius: 10px;
@@ -189,6 +189,7 @@ button img {
     top: 25%;
     margin: 0 auto;
     background-image: url("../assets/images/background.svg");
+    background-color: var(--empty-color);
     background-size: cover;
     padding: 1rem;
     border-radius: 10px;
