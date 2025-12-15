@@ -4,6 +4,7 @@
     gap: 1rem;
     align-items: center;
     z-index: 1;
+    touch-action: none;
 }
 
 .maze-wrapper.editing::after {
@@ -226,6 +227,16 @@ button img {
     visibility: hidden;
 }
 
+.edit-instruction::before {
+    content: "Click and drag to place.";
+    display: inline-block;
+}
+
+.cancel-instruction::before {
+    content: "Right-click to cancel editing.";
+    display: inline-block;
+}
+
 
 
 @media only screen and (width < 1600px) {
@@ -237,4 +248,16 @@ button img {
     .stats-modal {
         position: static;
     }
+}
+
+@media (hover: none) {
+    .edit-instruction::before {
+        content: "Touch and drag to place.";
+        display: inline-block;
+    }
+    .cancel-instruction::before {
+        content: "Long press to cancel.";
+        display: inline-block;
+    }
+    
 }
