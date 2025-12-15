@@ -8,7 +8,7 @@
 }
 
 .editing .board {
-    cursor: crosshair;
+    cursor: cell;
 }
 
 .cell {
