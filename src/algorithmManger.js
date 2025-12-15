@@ -87,20 +87,27 @@ class AlgorithmManger {
 
     setCell(row, col, symbol) {
         if (symbol === this.startSymbol) {
-            if (this.startRow !== null) {
-                this.board[this.startRow][this.startCol] = this.emptySymbol;
-            }
             this.startRow = row;
             this.startCol = col;
+            this.board[this.startRow][this.startCol] = this.emptySymbol;
             return;
         }
-
         if (symbol === this.goalSymbol) {
             if (this.goalRow !== null) {
                 this.board[this.goalRow][this.goalCol] = this.emptySymbol;
             }
             this.goalRow = row;
             this.goalCol = col;
+            this.board[this.goalRow][this.goalCol] = this.goalSymbol;
+            return;
+        }
+
+        if (row === this.startRow && col === this.startCol) {
+            this.startRow = null;
+            this.startCol = null;
+        } else if (row === this.goalRow && col === this.goalCol) {
+            this.goalRow = null;
+            this.goalCol = null;
         }
         this.board[row][col] = symbol;
     };
