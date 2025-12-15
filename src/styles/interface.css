@@ -228,7 +228,7 @@ button img {
 
 
 
-@media only screen and (width < 1500px) {
+@media only screen and (width < 1600px) {
     #root {
         flex-direction: column;
         gap: 1.5rem;
