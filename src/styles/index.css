@@ -21,6 +21,7 @@ html {
     --dark-metallic-color: #838487;
     --blue-light-color: #26F7FD;
     --orange-light-color: #FDAA48;
+    --disabled-color: #808080;
     --blue-light-filter: 
     brightness(0) 
     saturate(100%) 
@@ -39,6 +40,15 @@ html {
     hue-rotate(329deg) 
     brightness(102%) 
     contrast(98%);
+    --disabled-filter:
+    brightness(0) 
+    saturate(100%) 
+    invert(50%) 
+    sepia(38%) 
+    saturate(0%) 
+    hue-rotate(182deg) 
+    brightness(93%) 
+    contrast(87%);
 }
 
 #root {
