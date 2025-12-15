@@ -49,6 +49,7 @@ html {
     hue-rotate(182deg) 
     brightness(93%) 
     contrast(87%);
+    scrollbar-color: var(--wall-color) #BBAA99;
 }
 
 #root {
