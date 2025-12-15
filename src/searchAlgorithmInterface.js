@@ -17,11 +17,16 @@ class SearchAlgorithmInterface {
         this.shortestPathSymbol = "path";
         this.playClass = "play";
         this.pauseClass = "pause";
+
         this.playPauseBtn = document.querySelector(".play-pause-btn");
         this.speedBtn = document.querySelector(".speed-btn");
         this.bfsBtn = document.querySelector(".bfs-btn");
         this.dfsBtn = document.querySelector(".dfs-btn");
         this.boardDiv = document.querySelector(".board");
+        this.searchSpan = document.querySelector(".search-type");
+        this.stepsSpan = document.querySelector(".total-steps");
+        this.neededStepsSpan = document.querySelector(".needed-steps");
+        this.efficiencySpan = document.querySelector(".efficiency");
 
         this.algorithmManager = new AlgorithmManger(
             boardWidth, 
@@ -70,6 +75,7 @@ class SearchAlgorithmInterface {
 
         this.scrubBtnsCallBack = this.scrubBtnsCallBack.bind(this);
         this.editBtnsCallBack = this.editBtnsCallBack.bind(this);
+        this.showSearchStats = this.showSearchStats.bind(this);
         this.autoPlay = this.autoPlay.bind(this);
         this.initializeInterface();
     };
@@ -125,6 +131,7 @@ class SearchAlgorithmInterface {
 
         } else if (target.matches(".randomize-btn")) {
             this.#resetSearch();
+            this.clearSearchStats();
             this.#randomizeGrid();
 
         } else if (target.matches("edit-btn")) {
@@ -241,6 +248,7 @@ class SearchAlgorithmInterface {
         }
         if (this.searchPathIndex === this.searchPath.length) {
             this.#showShortestPath();
+            setTimeout(this.showSearchStats(), 0);
             return;
         }
 
@@ -253,6 +261,22 @@ class SearchAlgorithmInterface {
             this.display.setCell(row, col, undoSymbol);
         };
         this.history.push(undoFunction);
+    };
+
+    showSearchStats() {
+        const searchType = (this.breadthFirstSearch) ? "Breadth First Search" : "Depth First Search";
+        this.searchSpan.textContent = searchType;
+        this.stepsSpan.textContent = this.searchPath.length;
+        this.neededStepsSpan.textContent = this.directPath.length;
+        const efficiency = Math.round((this.directPath.length / this.searchPath.length) * 100);
+        this.efficiencySpan.textContent = `${efficiency}%`;
+    };
+
+    clearSearchStats() {
+        this.searchSpan.textContent = "";
+        this.stepsSpan.textContent = "";
+        this.neededStepsSpan.textContent = "";
+        this.efficiencySpan.textContent = "";
     };
 
     #showShortestPath() {
