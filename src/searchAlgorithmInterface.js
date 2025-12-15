@@ -317,9 +317,11 @@ class SearchAlgorithmInterface {
         const searchType = (this.breadthFirstSearch) ? "Breadth First Search" : "Depth First Search";
         this.searchSpan.textContent = searchType;
         this.stepsSpan.textContent = this.searchPath.length;
-        this.neededStepsSpan.textContent = this.directPath.length;
+        this.neededStepsSpan.textContent = (this.directPath.length !== 0) ? this.directPath.length : "N/A";
+
         const efficiency = Math.round((this.directPath.length / this.searchPath.length) * 10000) / 100;
-        this.efficiencySpan.textContent = `${efficiency}%`;
+        const efficiencyPercentage = (efficiency !== 0) ? `${efficiency}%`: "N/A"
+        this.efficiencySpan.textContent = efficiencyPercentage;
     };
 
     clearSearchStats() {
