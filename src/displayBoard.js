@@ -83,6 +83,8 @@ class DisplayBoard {
         this.#removeCellClasses(cell);
         cell.classList.add(classStr);
 
+        const searchPathEdit = classStr === this.visitedClassStr || classStr === this.shortestPathClassStr;
+
         if (classStr === this.goalClassStr && cell !== this.goalCell) {
             const oldGoalCell = this.goalCell;
             this.goalCell = cell;
@@ -97,6 +99,10 @@ class DisplayBoard {
                 this.#removeCellClasses(oldStartCell);
                 oldStartCell.classList.add(this.emptyClassStr);
             }
+        } else if (cell === this.goalCell && !searchPathEdit && classStr !== this.goalClassStr) {
+            this.goalCell = null;
+        } else if (cell === this.startCell && !searchPathEdit && classStr !== this.startClassStr) {
+            this.startCell = null;
         }
     };
 
