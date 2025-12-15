@@ -437,6 +437,8 @@ class SearchAlgorithmInterface {
             if (!target.matches(".cell")) {
                 return;
             }
+            
+            event.preventDefault();
             this.#editCell(target);
         });
 
