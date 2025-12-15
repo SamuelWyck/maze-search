@@ -4,6 +4,9 @@
     gap: 1rem;
     align-items: center;
     z-index: 1;
+}
+
+.maze-wrapper.editing {
     touch-action: none;
 }
 
