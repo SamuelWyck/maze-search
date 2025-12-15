@@ -38,6 +38,23 @@
             <p>Needed Steps: <span class="needed-steps"></span></p>
             <p>Efficiency: <span class="efficiency"></span></p>
         </div>
+        <div class="edit-modal hidden">
+            <div class="exit-wrapper">
+                <button class="exit-btn"><img src="./assets/images/close.svg" alt="close"></button>
+            </div>
+            <p>
+                <span>Choose tile to place.</span>
+                <span>Left-click to place.</span>
+                <span>Right-click to cancel editing.</span>
+            </p>
+            <div class="edit-btns">
+                <button data-symbol="O" class="empty-btn">Erase</button>
+                <button data-symbol="W" class="wall-btn">Wall</button>
+                <button data-symbol="S" class="start-btn">Start</button>
+                <button data-symbol="G" class="goal-btn">Goal</button>
+                <button class="clear-btn">Clear Grid</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>
