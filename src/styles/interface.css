@@ -43,13 +43,25 @@ button {
     --filter: var(--blue-light-filter);
 }
 
-button:hover, button:active {
+.editing button:not(.edit-btn) {
+    cursor: no-drop;
+    color: var(--disabled-color);
+    --filter: var(--disabled-filter);
+}
+
+.maze-wrapper:not(.editing) button:hover, 
+.maze-wrapper:not(.editing) button:active,
+.maze-wrapper + .edit-modal button:hover,
+.maze-wrapper + .edit-modal button:active,
+.edit-btn:hover, .edit-btn:active {
     transform: scale(1.1);
     color: var(--orange-light-color);
     --filter: var(--orange-light-filter);
 }
 
-button:active {
+.maze-wrapper:not(.editing) button:active,
+.maze-wrapper + .edit-modal button:active,
+.edit-btn:active {
     box-shadow: 0px 5px 10px -1px inset black;
 }
 
