@@ -438,7 +438,6 @@ class SearchAlgorithmInterface {
                 return;
             }
             
-            event.preventDefault();
             this.#editCell(target);
         });
 
