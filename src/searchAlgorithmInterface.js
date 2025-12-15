@@ -400,6 +400,13 @@ class SearchAlgorithmInterface {
             this.drawing = true;
             this.#editCell(event.target);
         });
+        this.boardDiv.addEventListener("touchstart", (event) => {
+            if (!event.target.matches(".cell") || !this.editing) {
+                return;
+            }
+            this.drawing = true;
+            this.#editCell(event.target);
+        });
 
         document.addEventListener("mouseup", (event) => {
             if (!this.editing || event.button !== 0) {
@@ -407,12 +414,30 @@ class SearchAlgorithmInterface {
             }
             this.drawing = false;
         });
+        document.addEventListener("touchend", () => {
+            if (!this.editing) {
+                return;
+            }
+            this.drawing = false;
+        });
 
         this.boardDiv.addEventListener("mouseover", (event) => {
             if (!this.editing || !event.target.matches(".cell") || !this.drawing) {
-                return;
+            return;
             }
             this.#editCell(event.target);
+        });
+        this.boardDiv.addEventListener("touchmove", (event) => {
+            if (!this.drawing || !this.editing) {
+                return;
+            }
+            const touch = event.targetTouches[0];
+            const {clientX, clientY} = touch;
+            const target = document.elementFromPoint(clientX, clientY);
+            if (!target.matches(".cell")) {
+                return;
+            }
+            this.#editCell(target);
         });
 
         this.boardDiv.addEventListener("dragstart", function(event) {
