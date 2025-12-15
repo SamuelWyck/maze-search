@@ -18,15 +18,19 @@ class SearchAlgorithmInterface {
         this.playClass = "play";
         this.pauseClass = "pause";
 
+        this.hiddenClass = "hidden";
+        this.mazeEditClass = "editing";
         this.playPauseBtn = document.querySelector(".play-pause-btn");
         this.speedBtn = document.querySelector(".speed-btn");
         this.bfsBtn = document.querySelector(".bfs-btn");
         this.dfsBtn = document.querySelector(".dfs-btn");
+        this.mazeWrapper = document.querySelector(".maze-wrapper");
         this.boardDiv = document.querySelector(".board");
         this.searchSpan = document.querySelector(".search-type");
         this.stepsSpan = document.querySelector(".total-steps");
         this.neededStepsSpan = document.querySelector(".needed-steps");
         this.efficiencySpan = document.querySelector(".efficiency");
+        this.editModal = document.querySelector(".edit-modal");
 
         this.algorithmManager = new AlgorithmManger(
             boardWidth, 
@@ -73,9 +77,15 @@ class SearchAlgorithmInterface {
         this.directPath = null;
         this.history = [];
 
+        this.editing = false;
+        this.editSymbol = null;
+        this.editModalShowing = false;
+        this.drawing = false;
+
         this.scrubBtnsCallBack = this.scrubBtnsCallBack.bind(this);
         this.editBtnsCallBack = this.editBtnsCallBack.bind(this);
         this.showSearchStats = this.showSearchStats.bind(this);
+        this.editModalCallBack = this.editModalCallBack.bind(this);
         this.autoPlay = this.autoPlay.bind(this);
         this.initializeInterface();
     };
@@ -101,11 +111,11 @@ class SearchAlgorithmInterface {
 
     editBtnsCallBack(event) {
         const target = (event.target.matches("button")) ? event.target : event.target.parentElement;
-        if (!target.matches("button")) {
+        if (!target.matches("button") || this.editModalShowing) {
             return;
         }
 
-        if (target.matches(".bfs-btn")) {
+        if (target.matches(".bfs-btn") && !this.editing) {
             if (this.breadthFirstSearch) {
                 return;
             }
@@ -117,7 +127,7 @@ class SearchAlgorithmInterface {
             this.breadthFirstSearch = true;
             this.#toggleSearchBtnsActiveClass();
 
-        } else if (target.matches(".dfs-btn")) {
+        } else if (target.matches(".dfs-btn") && !this.editing) {
             if (!this.breadthFirstSearch) {
                 return;
             }
@@ -129,19 +139,24 @@ class SearchAlgorithmInterface {
             this.breadthFirstSearch = false;
             this.#toggleSearchBtnsActiveClass();
 
-        } else if (target.matches(".randomize-btn")) {
+        } else if (target.matches(".randomize-btn") && !this.editing) {
             this.#resetSearch();
             this.clearSearchStats();
             this.#randomizeGrid();
 
-        } else if (target.matches("edit-btn")) {
-
+        } else if (target.matches(".edit-btn")) {
+            this.editModal.classList.remove(this.hiddenClass);
+            this.editModalShowing = true;
+            if (this.running) {
+                this.running = false;
+                this.#togglePlayPauseBtnClass();
+            }
         }
     };
 
     scrubBtnsCallBack(event) {
         const target = (event.target.matches("button")) ? event.target : event.target.parentElement;
-        if (!target.matches("button")) {
+        if (!target.matches("button") || this.editing || this.editModalShowing) {
             return;
         }
 
@@ -195,6 +210,41 @@ class SearchAlgorithmInterface {
                 this.#generateSearch();
             }
             this.#showVisitedCell();
+        }
+    };
+
+    editModalCallBack(event) {
+        const target = (event.target.matches("button")) ? event.target : event.target.parentElement;
+        if (target.matches(".exit-btn")) {
+            this.editModal.classList.add(this.hiddenClass);
+            this.editModalShowing = false;
+
+        } else if (target.matches(".clear-btn")) {
+            this.#resetSearch();
+            this.display.clearBoard();
+            this.algorithmManager.resetBoard();
+            this.clearSearchStats();
+            this.editModal.classList.add(this.hiddenClass);
+            this.editModalShowing = false;
+
+        } else if (target.matches(".wall-btn, .goal-btn, .start-btn, .empty-btn")) {
+            if (this.searchPath !== null) {
+                this.display.clearSearchPath(this.searchPath);
+            }
+            this.#resetSearch();
+            this.clearSearchStats();
+            this.editModal.classList.add(this.hiddenClass);
+            this.mazeWrapper.classList.add(this.mazeEditClass);
+            this.editSymbol = target.dataset.symbol;
+            this.editing = true;
+            this.editModalShowing = false;
+        }
+    };
+
+    tileEditingCallBack(event) {
+        const target = event.target;
+        if (!target.matches(".cell")) {
+            return;
         }
     };
 
@@ -268,7 +318,7 @@ class SearchAlgorithmInterface {
         this.searchSpan.textContent = searchType;
         this.stepsSpan.textContent = this.searchPath.length;
         this.neededStepsSpan.textContent = this.directPath.length;
-        const efficiency = Math.round((this.directPath.length / this.searchPath.length) * 100);
+        const efficiency = Math.round((this.directPath.length / this.searchPath.length) * 10000) / 100;
         this.efficiencySpan.textContent = `${efficiency}%`;
     };
 
@@ -292,6 +342,13 @@ class SearchAlgorithmInterface {
             }
         };
         this.history.push(undoFunction);
+    };
+
+    #editCell(cell) {
+        const row = Number(cell.dataset.row);
+        const col = Number(cell.dataset.col);
+        this.display.setCell(row, col, this.editSymbol);
+        this.algorithmManager.setCell(row, col, this.editSymbol);
     };
 
     autoPlay() {
@@ -322,6 +379,43 @@ class SearchAlgorithmInterface {
 
         const editBtnsDiv = document.querySelector(".search-controls");
         editBtnsDiv.addEventListener("click", this.editBtnsCallBack);
+
+        this.editModal.addEventListener("click", this.editModalCallBack);
+
+        document.addEventListener("contextmenu", (event) => {
+            if (this.editing) {
+                event.preventDefault();
+                this.editing = false;
+                this.drawing = false;
+                this.mazeWrapper.classList.remove(this.mazeEditClass);
+            }
+        });
+
+        this.boardDiv.addEventListener("mousedown", (event) => {
+            if (!event.target.matches(".cell") || !this.editing || event.button !== 0) {
+                return;
+            }
+            this.drawing = true;
+            this.#editCell(event.target);
+        });
+
+        document.addEventListener("mouseup", (event) => {
+            if (!this.editing || event.button !== 0) {
+                return;
+            }
+            this.drawing = false;
+        });
+
+        this.boardDiv.addEventListener("mouseover", (event) => {
+            if (!this.editing || !event.target.matches(".cell") || !this.drawing) {
+                return;
+            }
+            this.#editCell(event.target);
+        });
+
+        this.boardDiv.addEventListener("dragstart", function(event) {
+            event.preventDefault();
+        })
     };
 };
 
