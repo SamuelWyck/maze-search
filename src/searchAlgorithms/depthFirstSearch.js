@@ -4,34 +4,32 @@ class DepthFirstSearch {
         this.wallSymbol = wallSymbol;
     };
 
-    shortestPath(grid, startRow, startCol) {
-        const visited = new Set();
+    shortestPath(grid, startRow, startCol, steps) {
         const memo = {};
-        const shortestPath = this.#findShortestPath(grid, startRow, startCol, visited, memo);
+        const shortestPath = this.#findShortestPath(grid, startRow, startCol, steps, memo);
         shortestPath.reverse();
         return shortestPath;
     };
 
-    #findShortestPath(grid, row, col, visited, memo) {
+    #findShortestPath(grid, row, col, steps, memo) {
         const rowValid = 0 <= row && row < grid.length;
         const colValid = 0 <= col && col < grid[0].length;
         if (!rowValid || !colValid) {
             return [];
-        }     
-        const key = JSON.stringify([row, col]);
-        if (visited.has(key)) {
-            return [];
         }
+        const key = JSON.stringify([row, col, steps]);
         if (key in memo) {
-            // might need to slice this list before I return it
-            return memo[key];
+            return memo[key].slice();
         }
         const symbol = grid[row][col];
         if (symbol === this.wallSymbol) {
             return [];
         }
+        if (steps < 0) {
+            return [];
+        }
         const position = [row, col];
-        if (symbol === this.goalSymbol) {
+        if (steps === 0 && symbol === this.goalSymbol) {
             return [position];
         }
 
@@ -39,24 +37,18 @@ class DepthFirstSearch {
             [row - 1, col], [row + 1, col],
             [row, col - 1], [row, col + 1]
         ];
-
-        visited.add(key);
-        let minPath = [];
         for (let neighbor of neighbors) {
             const [nRow, nCol] = neighbor;
-            const subPath = this.#findShortestPath(grid, nRow, nCol, visited, memo);
-            if (subPath.length === 0) {
-                continue
+            const subPath = this.#findShortestPath(grid, nRow, nCol, steps - 1, memo);
+            if (subPath.length !== 0) {
+                subPath.push(position);
+                memo[key] = subPath.slice();
+                return subPath;
             }
-            minPath = (minPath.length === 0 || subPath.length < minPath.length) ? subPath : minPath;
         }
-        visited.delete(key);
 
-        if (minPath.length > 0) {
-            minPath.push(position);
-        }
-        memo[key] = minPath.slice();
-        return minPath;
+        memo[key] = [];
+        return [];
     };
 
     dfsPath(grid, startRow, startCol) {
