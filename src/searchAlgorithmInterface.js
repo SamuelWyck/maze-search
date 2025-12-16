@@ -121,7 +121,7 @@ class SearchAlgorithmInterface {
             }
 
             if (this.searchPath !== null) {
-                this.display.clearSearchPath(this.searchPath);
+                this.display.clearSearchPath(this.searchPath, this.directPath);
             }
             this.#resetSearch();
             this.breadthFirstSearch = true;
@@ -133,7 +133,7 @@ class SearchAlgorithmInterface {
             }
 
             if (this.searchPath !== null) {
-                this.display.clearSearchPath(this.searchPath);
+                this.display.clearSearchPath(this.searchPath, this.directPath);
             }
             this.#resetSearch();
             this.breadthFirstSearch = false;
@@ -229,7 +229,7 @@ class SearchAlgorithmInterface {
 
         } else if (target.matches(".wall-btn, .goal-btn, .start-btn, .empty-btn")) {
             if (this.searchPath !== null) {
-                this.display.clearSearchPath(this.searchPath);
+                this.display.clearSearchPath(this.searchPath, this.directPath);
             }
             this.#resetSearch();
             this.clearSearchStats();
@@ -304,12 +304,10 @@ class SearchAlgorithmInterface {
 
         const position = this.searchPath[this.searchPathIndex];
         const [row, col] = position;
-        this.display.setCell(row, col, this.visitedSymbol);
+        const oldSymbol = this.display.setCell(row, col, this.visitedSymbol);
 
-        const isGoalSymbol = this.searchPathIndex === this.searchPath.length - 1 && this.directPath.length !== 0;
-        const undoSymbol = (isGoalSymbol) ? this.goalSymbol : this.emptySymbol;
         const undoFunction = () => {
-            this.display.setCell(row, col, undoSymbol);
+            this.display.setCell(row, col, oldSymbol);
         };
         this.history.push(undoFunction);
     };
@@ -333,15 +331,19 @@ class SearchAlgorithmInterface {
     };
 
     #showShortestPath() {
+        const oldClasses = [];
         for (let position of this.directPath) {
             const [row, col] = position;
-            this.display.setCell(row, col, this.shortestPathSymbol);
+            const oldClass = this.display.setCell(row, col, this.shortestPathSymbol);
+            oldClasses.push(oldClass);
         }
-
+        
         const undoFunction = () => {
-            for (let position of this.directPath) {
+            for (let i = 0; i < this.directPath.length; i += 1) {
+                const position = this.directPath[i];
+                const symbol = oldClasses[i];
                 const [row, col] = position;
-                this.display.setCell(row, col, this.visitedSymbol);
+                this.display.setCell(row, col, symbol);
             }
         };
         this.history.push(undoFunction);
