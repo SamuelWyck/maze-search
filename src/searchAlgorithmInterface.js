@@ -298,7 +298,7 @@ class SearchAlgorithmInterface {
         }
         if (this.searchPathIndex === this.searchPath.length) {
             this.#showShortestPath();
-            setTimeout(this.showSearchStats(), 0);
+            this.showSearchStats();
             return;
         }
 
