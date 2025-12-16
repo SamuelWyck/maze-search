@@ -21,6 +21,14 @@ class DisplayBoard {
         this.goalClassStr = goalClassStr;
         this.visitedClassStr = visitedClassStr;
         this.shortestPathClassStr = shortestPathClassStr;
+        this.symbolList = [
+            this.emptyClassStr = emptyClassStr,
+            this.wallClassStr = wallClassStr,
+            this.startClassStr = startClassStr,
+            this.goalClassStr = goalClassStr,
+            this.visitedClassStr = visitedClassStr,
+            this.shortestPathClassStr = shortestPathClassStr
+        ];
 
         this.boardDiv = boardDiv;
         this.startCell = null;
@@ -80,7 +88,7 @@ class DisplayBoard {
 
     setCell(row, col, classStr) {
         const cell = this.cells[row][col];
-        this.#removeCellClasses(cell);
+        const removedClass = this.#removeCellClasses(cell);
         cell.classList.add(classStr);
 
         const searchPathEdit = classStr === this.visitedClassStr || classStr === this.shortestPathClassStr;
@@ -104,20 +112,36 @@ class DisplayBoard {
         } else if (cell === this.startCell && !searchPathEdit && classStr !== this.startClassStr) {
             this.startCell = null;
         }
+
+        return removedClass;
     };
 
     #removeCellClasses(cell) {
-        cell.classList.remove(
-            this.emptyClassStr, 
-            this.startClassStr, 
-            this.goalClassStr, 
-            this.wallClassStr, 
-            this.visitedClassStr, 
-            this.shortestPathClassStr
-        );
+        let removedClass = null;
+        for (let symbolClass of this.symbolList) {
+            if (cell.classList.contains(symbolClass)) {
+                removedClass = symbolClass;
+                break;
+            }
+        }
+        cell.classList.remove(removedClass);
+        return removedClass;
     };
 
-    clearSearchPath(searchPath) {
+    clearSearchPath(searchPath, directPath) {
+        for (let position of directPath) {
+            const [row, col] = position;
+            const cell = this.cells[row][col];
+
+            let classStr = this.emptyClassStr;
+            if (cell === this.startCell) {
+                classStr = this.startClassStr;
+            } else if (cell === this.goalCell) {
+                classStr = this.goalClassStr;
+            }
+            this.setCell(row, col, classStr);
+        }
+
         for (let position of searchPath) {
             const [row, col] = position;
             const cell = this.cells[row][col];
