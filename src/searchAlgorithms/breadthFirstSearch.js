@@ -46,6 +46,42 @@ class BreadthFirstSearch {
 
         return path;
     };
+
+    shortestDistance(grid, startRow, startCol) {
+        const visited = new Set(JSON.stringify([startRow, startCol]));
+        const startDistance = 0;
+        const queue = new Deque([[startRow, startCol, startDistance]]);
+
+        while (queue.length !== 0) {
+            const [row, col, distance] = queue.popLeft();
+            const symbol = grid[row][col];
+            if (symbol === this.goalSymbol) {
+                return distance;
+            }
+
+            const neighbors = [
+                [row - 1, col], [row + 1, col],
+                [row, col - 1], [row, col + 1]
+            ];
+            for (let neighbor of neighbors) {
+                const [nRow, nCol] = neighbor;
+                const rowValid = 0 <= nRow && nRow < grid.length;
+                const colValid = 0 <= nCol && nCol < grid[0].length;
+                if (!rowValid || !colValid) {
+                    continue;
+                }
+                const key = JSON.stringify(neighbor);
+                const symbol = grid[nRow][nCol];
+                if (symbol === this.wallSymbol || visited.has(key)) {
+                    continue;
+                }
+                visited.add(key);
+                queue.push([nRow, nCol, distance + 1]);
+            }
+        }
+
+        return -1;
+    };
 };
 
 
