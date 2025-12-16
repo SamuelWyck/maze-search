@@ -39,7 +39,8 @@ class AlgorithmManger {
         }
 
         const bfsPath = this.bfs.breadthFirstPath(this.board, this.startRow, this.startCol);
-        const shortestPath = this.dfs.shortestPath(this.board, this.startRow, this.startCol);
+        const pathSteps = this.bfs.shortestDistance(this.board, this.startRow, this.startCol);
+        const shortestPath = this.dfs.shortestPath(this.board, this.startRow, this.startCol, pathSteps);
         return [bfsPath, shortestPath];
     };
 
@@ -49,7 +50,8 @@ class AlgorithmManger {
         }
 
         const dfsPath = this.dfs.dfsPath(this.board, this.startRow, this.startCol);
-        const shortestPath = this.dfs.shortestPath(this.board, this.startRow, this.startCol);
+        const pathSteps = this.bfs.shortestDistance(this.board, this.startRow, this.startCol);
+        const shortestPath = this.dfs.shortestPath(this.board, this.startRow, this.startCol, pathSteps);
         return [dfsPath, shortestPath];
     };
 
